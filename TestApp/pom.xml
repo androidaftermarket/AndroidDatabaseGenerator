@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+        >
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.android.test</groupId>
     <artifactId>TestApp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>apk</packaging>
+    <name>Test</name>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -16,64 +19,27 @@
         <maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
         <api.platform>17</api.platform>
 
+
         <!-- Dependencies -->
         <android.version>4.1.1.4</android.version>
-        <support-v4.version>r7</support-v4.version>
     </properties>
-
-    <distributionManagement>
-        <site>
-            <id>dev-builder-site</id>
-            <url>s3://dev-builder-maven/site</url>
-        </site>
-        <repository>
-            <id>dev-builder-release</id>
-            <url>s3://dev-builder-maven/release</url>
-        </repository>
-        <snapshotRepository>
-            <id>dev-builder-snapshot</id>
-            <url>s3://dev-builder-maven/snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
-
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>central</id>
-            <name>Central Repository</name>
-            <url>http://repo.maven.apache.org/maven2</url>
-        </repository>
-        <repository>
-            <id>dev-builder-release</id>
-            <releases>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-            <url>s3://dev-builder-maven/release</url>
-        </repository>
-        <repository>
-            <id>dev-builder-snapshot</id>
-            <url>s3://dev-builder-maven/snapshot</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>android</groupId>
+            <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-            <version>4.3_r2</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.android.gda.dbgenerator</groupId>
-            <artifactId>com.android.gda.dbgenerator.annotations</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <version>${android.version}</version>
         </dependency>
         <dependency>
             <groupId>com.android.gda.dbgenerator</groupId>
             <artifactId>com.android.gda.dbgenerator.processors</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.android.dbgenerator</groupId>
+            <artifactId>com.android.dbgenerator.annotations</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

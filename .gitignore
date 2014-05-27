@@ -1,0 +1,10 @@
+*.iml
+bin/
+gen/
+*.swp
+target/
+.idea
+target
+gen-external-apklibs
+classes
+src-gen/

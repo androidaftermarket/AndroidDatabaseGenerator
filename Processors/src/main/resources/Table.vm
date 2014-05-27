@@ -1,0 +1,30 @@
+package ${packageName};
+
+import android.content.ContentResolver;
+import android.net.Uri;
+import android.provider.BaseColumns;
+
+public class ${className}Table implements BaseColumns {
+
+    public static final String TABLE_NAME = "${className.toLowerCase()}";
+#if(${useContentProvider} == true)
+    public static final Uri CONTENT_URI = Uri.parse("content://" + ${databaseName}Provider.AUTHORITY + "/" + TABLE_NAME);
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.${packageName}." + TABLE_NAME;
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.${packageName}." + TABLE_NAME;
+#end
+#foreach($field in $fields)
+    public static final String COLUMN_${field.getColumnName().toUpperCase()} = "${field.getColumnName()}";
+#end
+
+    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " +
+                        TABLE_NAME + "(" +
+                        _ID + " INTEGER PRIMARY KEY AUTOINCREMENT" +
+#foreach($field in $fields)
+                        "," +
+                        COLUMN_${field.getColumnName().toUpperCase()} + " ${field.getColumnType()}#if(${field.isUnique()} == true) UNIQUE#end#if(${field.isNotNull()} == true) NOT NULL#end" +
+#end
+                        ");";
+
+    public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+
+}

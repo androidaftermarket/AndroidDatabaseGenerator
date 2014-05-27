@@ -1,0 +1,98 @@
+package ${packageName};
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ${className}DAO {
+
+    private SQLiteDatabase mDatabase;
+
+    private static volatile ${className}DAO mInstance;
+
+    public static ${className}DAO getInstance(Context context) {
+        if (mInstance == null) {
+            synchronized (${className}DAO.class) {
+                if (mInstance == null) {
+                    mInstance = new ${className}DAO(context);
+                }
+            }
+        }
+        return mInstance;
+    }
+
+    private ${className}DAO(Context context) {
+        mDatabase = ${databaseName}OpenHelper.getInstance(context).getWritableDatabase();
+    }
+
+    public Cursor query(String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
+        return mDatabase.query(${className}Table.TABLE_NAME, columns, selection, selectionArgs, groupBy, having, orderBy);
+    }
+
+    public List<${className}> query(String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
+        Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, selection, selectionArgs, groupBy, having, orderBy);
+        return as${className}List(cursor);
+    }
+
+    public long insert(${className} ob) {
+        return mDatabase.insert(${className}Table.TABLE_NAME, null, asContentValues(ob));
+    }
+
+    public void insert(List<${className}> list) {
+        try {
+            mDatabase.beginTransaction();
+            for (${className} ob : list) {
+                insert(ob);
+                mDatabase.yieldIfContendedSafely();
+            }
+            mDatabase.setTransactionSuccessful();
+        } finally {
+            mDatabase.endTransaction();
+        }
+    }
+
+    public int update(${className} ob, String whereClause, String[] whereArgs) {
+        return mDatabase.update(${className}Table.TABLE_NAME,asContentValues(ob), whereClause, whereArgs);
+    }
+
+    public int delete(String whereClause, String[] whereArgs) {
+        return mDatabase.delete(${className}Table.TABLE_NAME, whereClause, whereArgs);
+    }
+
+    private List<${className}> as${className}List(Cursor cursor) {
+        List<${className}> list = new ArrayList<${className}>();
+        if (cursor == null) return list;
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(as${className}(cursor));
+            } while (cursor.moveToNext());
+        }
+
+        return list;
+    }
+
+    private ContentValues asContentValues(${className} ob) {
+        ContentValues contentValues = new ContentValues();
+#foreach($field in $fields)
+        contentValues.put(${className}Table.COLUMN_${field.getColumnName().toUpperCase()}, ob.get$display.capitalize(${field.getColumnName()})());
+#end
+        return contentValues;
+    }
+
+    private ${className} as${className}(Cursor cursor) {
+        ${className} ob = new ${className}();
+#set ($INTEGER = "INTEGER")
+#foreach($field in $fields)
+#if(${field.getColumnType()} == ${INTEGER})
+        ob.set$display.capitalize(${field.getColumnName()})(cursor.getInt(cursor.getColumnIndex(${className}Table.COLUMN_${field.getColumnName().toUpperCase()})));
+#else
+        ob.set$display.capitalize(${field.getColumnName()})(cursor.getString(cursor.getColumnIndex(${className}Table.COLUMN_${field.getColumnName().toUpperCase()})));
+#end
+#end
+        return ob;
+    }
+}

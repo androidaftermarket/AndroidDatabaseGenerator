@@ -5,43 +5,47 @@ Android DB Generator
 
 A DB Generator for android using annotations.
 
-*Generates SQLiteOpenHelper class which will be [DatabaseName]OpenHelper
+Generates SQLiteOpenHelper class which will be [DatabaseName]OpenHelper.
 
-*Generates Table Class for each Model which will be [ModelClassName]Table which extends BaseColumn
+Generates Table Class for each Model which will be [ModelClassName]Table which extends BaseColumn.
 
-*Generates DAO for each Table
+Generates DAO for each Table.
+
 
 HOW TO USE:
+===========
 
 Use @DbConfig for the configuration of the Database
 
+```
 @DbConfig
   databaseName
   authority //Currently Not Supported
   useContentProvider //Currently Not Supported
   databaseVersion 
+```
 
-*NOTE: Must have ONE @DbConfig or the classes will not be generated
-// SAMPLE //
+NOTE: Must have ONE @DbConfig or the classes will not be generated
 
+```
 @DbConfig(databaseName = "MyDatabase", databaseVersion = 1)
 public class Config {
-
 }
-
+```
 
 Use @Table to Identify that the class is a table in the database
 Use @Field to Identify the field in the table 
 
+```
 @Field 
   type = TEXT/INTEGER (default TEXT)
   unique = true/false (default false)
   notNull = true/false (default false)
+```
 
-*NOTE: Must have Getter and Setter for each Field
+NOTE: Must have Getter and Setter for each Field
 
-// SAMPLE //
-
+```
 @Table
 public class User {
 
@@ -67,30 +71,23 @@ public class User {
         this.name = name;
     }
 }
+```
 
 DAO API
-
-Cursor query(params...);  
-
-List<[MODEL]> query(params...);
-
-List<[MODEL]> queryAll(String sortOrder);
-    
-List<[MODEL]> queryByField(String field, String args, String orderBy);
-    
-[MODEL] queryBy[FIELD](String value); //Query By [FIELD] which is UNIQUE
-    
-insert([MODEL] ob);
-
-bulkInsert(List<[MODEL]> list);
-
-update([MODEL] ob, String whereClause, String[] whereArgs);
-    
-bulkUpdateBy[FIELD](List<[MODEL]> list) //Update By [FIELD] which is UNIQUE
-
-delete(String whereClause, String[] whereArgs);
-
-deleteAll();
+=======
+```
+  Cursor query(params...);  
+  List<[MODEL]> query(params...);
+  List<[MODEL]> queryAll(String sortOrder);
+  List<[MODEL]> queryByField(String field, String args, String orderBy);
+  [MODEL] queryBy[FIELD](String value); //Query By [FIELD] which is UNIQUE
+  insert([MODEL] ob);
+  bulkInsert(List<[MODEL]> list);
+  update([MODEL] ob, String whereClause, String[] whereArgs);
+  bulkUpdateBy[FIELD](List<[MODEL]> list) //Update By [FIELD] which is UNIQUE
+  delete(String whereClause, String[] whereArgs);
+  deleteAll();
+```
 
 deleteByField(String field, String value);
 

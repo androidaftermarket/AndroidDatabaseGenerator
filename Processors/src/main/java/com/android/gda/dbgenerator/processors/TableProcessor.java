@@ -1,9 +1,9 @@
 package com.android.gda.dbgenerator.processors;
 
-import com.android.gda.dbgenerator.annotations.Column;
 import com.android.gda.dbgenerator.annotations.DbConfig;
+import com.android.gda.dbgenerator.annotations.Field;
 import com.android.gda.dbgenerator.annotations.Table;
-import com.android.gda.dbgenerator.processors.elements.ColumnElement;
+import com.android.gda.dbgenerator.processors.elements.FieldElement;
 import com.android.gda.dbgenerator.processors.elements.TableElement;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -53,13 +53,14 @@ public class TableProcessor extends AbstractProcessor {
             authority = element.getAnnotation(DbConfig.class).authority();
             databaseName = element.getAnnotation(DbConfig.class).databaseName();
             databaseVersion = element.getAnnotation(DbConfig.class).databaseVersion();
-            useContentProvider = element.getAnnotation(DbConfig.class).useContentProvider();
+            //useContentProvider = element.getAnnotation(DbConfig.class).useContentProvider();
+            useContentProvider = false; //ContentProvider Not Supported TODO: Support ContentProvider
             PackageElement packageElement = (PackageElement) element.getEnclosingElement();
             databasePackage = packageElement.getQualifiedName().toString();
             log("DatabaseName : " + databaseName);
             log("DatabaseVersion : " + databaseVersion);
         } else {
-            log("DB Config File can only be ONE.");
+            log("DbConfig Error. Need only ONE DbConfig.");
             return true;
         }
 
@@ -84,12 +85,12 @@ public class TableProcessor extends AbstractProcessor {
 
             List<? extends Element> fieldsOfClassElement = ElementFilter.fieldsIn(element.getEnclosedElements());
 
-            List<ColumnElement> tableClassColumnElement = getColumnElementFields(fieldsOfClassElement);
+            List<FieldElement> tableClassFieldElement = getFieldElementFields(fieldsOfClassElement);
 
-            generateDbTable(tableClassElement.getPackageName(), tableClassElement.getClassName(), databaseName, useContentProvider, tableClassColumnElement);
+            generateDbTable(tableClassElement.getPackageName(), tableClassElement.getClassName(), databaseName, useContentProvider, tableClassFieldElement);
 
             if (useContentProvider == false && withConfig) {
-                generateDbTableDAO(tableClassElement.getPackageName(), tableClassElement.getClassName(), databaseName, tableClassColumnElement);
+                generateDbTableDAO(tableClassElement.getPackageName(), tableClassElement.getClassName(), databaseName, tableClassFieldElement);
             }
         }
 
@@ -101,7 +102,7 @@ public class TableProcessor extends AbstractProcessor {
         return true;
     }
 
-    private void generateDbTableDAO(String packageName, String className, String databaseName, List<ColumnElement> fields) {
+    private void generateDbTableDAO(String packageName, String className, String databaseName, List<FieldElement> fields) {
         VelocityEngine ve = new VelocityEngine(getVelocityProperty());
         ve.init();
 
@@ -116,11 +117,10 @@ public class TableProcessor extends AbstractProcessor {
         try {
             generateSourceCode(template, context, packageName + "." + className + "DAO");
         } catch (IOException e) {
-            log("Failed to generate Source Code");
-            log(e.getMessage());
+            logE(e.getMessage());
         }
     }
-    private void generateDbTable(String packageName, String className, String databaseName, boolean useContentProvider, List<ColumnElement> fields) {
+    private void generateDbTable(String packageName, String className, String databaseName, boolean useContentProvider, List<FieldElement> fields) {
         VelocityEngine ve = new VelocityEngine(getVelocityProperty());
         ve.init();
 
@@ -136,8 +136,7 @@ public class TableProcessor extends AbstractProcessor {
         try {
             generateSourceCode(template, context, packageName + "." + className + "Table");
         } catch (IOException e) {
-            log("Failed to generate Source Code");
-            log(e.getMessage());
+            logE(e.getMessage());
         }
     }
 
@@ -157,7 +156,7 @@ public class TableProcessor extends AbstractProcessor {
         try {
             generateSourceCode(template, context, packageName + "." + databaseName + "OpenHelper");
         } catch (IOException e) {
-            log(e.getMessage());
+            logE(e.getMessage());
         }
     }
 
@@ -176,12 +175,16 @@ public class TableProcessor extends AbstractProcessor {
         try {
             generateSourceCode(template, context, packageName + "." + databaseName + "Provider");
         } catch (IOException e) {
-            log(e.getMessage());
+            logE(e.getMessage());
         }
     }
 
     private void log(String msg) {
         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, msg);
+    }
+
+    private void logE(String msg) {
+        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, msg);
     }
 
     private TableElement getTableElement(Element element) {
@@ -195,30 +198,32 @@ public class TableProcessor extends AbstractProcessor {
         TableElement tableElement = new TableElement();
         tableElement.setClassName(className);
         tableElement.setPackageName(packageName);
-        log(tableElement.toString());
+
+        log("/n" + tableElement.toString());
 
         return tableElement;
     }
 
-    private List<ColumnElement> getColumnElementFields(List<? extends Element> fieldsOfClassElement) {
+    private List<FieldElement> getFieldElementFields(List<? extends Element> fieldsOfClassElement) {
 
-        List<ColumnElement> tableClassColumnElement = new ArrayList<ColumnElement>();
+        List<FieldElement> tableClassFieldElement = new ArrayList<FieldElement>();
 
         for (Element field : fieldsOfClassElement) {
 
-            if (field.getAnnotation(Column.class) == null) continue;
+            if (field.getAnnotation(Field.class) == null) continue;
 
             VariableElement variableElement = (VariableElement) field;
 
-            ColumnElement columnElement = new ColumnElement();
-            columnElement.setColumnName(variableElement.getSimpleName().toString());
-            columnElement.setColumnType(variableElement.getAnnotation(Column.class).type().getValue());
-            columnElement.setUnique(variableElement.getAnnotation(Column.class).unique());
-            columnElement.setNotNull(variableElement.getAnnotation(Column.class).notNull());
-            tableClassColumnElement.add(columnElement);
+            FieldElement fieldElement = new FieldElement();
+            fieldElement.setFieldName(variableElement.getSimpleName().toString());
+            fieldElement.setFieldType(variableElement.getAnnotation(Field.class).type().getValue());
+            fieldElement.setUnique(variableElement.getAnnotation(Field.class).unique());
+            fieldElement.setNotNull(variableElement.getAnnotation(Field.class).notNull());
+            tableClassFieldElement.add(fieldElement);
+            log("/n" + fieldElement.toString());
         }
-        log(tableClassColumnElement.toString());
-        return tableClassColumnElement;
+
+        return tableClassFieldElement;
     }
 
     private void generateSourceCode(Template template, VelocityContext context, String path) throws IOException {

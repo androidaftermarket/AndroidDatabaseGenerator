@@ -38,29 +38,94 @@ public class ${className}DAO {
         return as${className}List(cursor);
     }
 
-    public long insert(${className} ob) {
-        return mDatabase.insert(${className}Table.TABLE_NAME, null, asContentValues(ob));
+    public List<User> queryAll(String orderBy) {
+        Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, null, null, null, null, orderBy);
+        return asUserList(cursor);
     }
 
-    public void insert(List<${className}> list) {
+    public List<User> queryByField(String field, String args, String orderBy) {
+        Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, field + " = " + args, null, null, null, orderBy);
+        return asUserList(cursor);
+    }
+
+#foreach($field in $fields)
+#if(${field.isUnique()} == true)
+    public User queryBy$display.capitalize(${field.getFieldName()})(String value) {
+        Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = " + value, null, null, null, null);
+        return asUser(cursor);
+    }
+
+#end
+#end
+    public long insert(${className} ${className.toLowerCase()}) {
+        return mDatabase.insert(${className}Table.TABLE_NAME, null, asContentValues(${className.toLowerCase()}));
+    }
+
+    public int bulkInsert(List<${className}> list) {
+        int count = 0;
         try {
             mDatabase.beginTransaction();
-            for (${className} ob : list) {
-                insert(ob);
+            for (${className} ${className.toLowerCase()} : list) {
+                long id = insert(${className.toLowerCase()});
+                if (id != -1) count += 1;
                 mDatabase.yieldIfContendedSafely();
             }
             mDatabase.setTransactionSuccessful();
         } finally {
             mDatabase.endTransaction();
         }
+        return count;
     }
 
-    public int update(${className} ob, String whereClause, String[] whereArgs) {
-        return mDatabase.update(${className}Table.TABLE_NAME,asContentValues(ob), whereClause, whereArgs);
+    public int update(${className} ${className.toLowerCase()}, String whereClause, String[] whereArgs) {
+        return mDatabase.update(${className}Table.TABLE_NAME,asContentValues(${className.toLowerCase()}), whereClause, whereArgs);
     }
 
+#foreach($field in $fields)
+#if(${field.isUnique()} == true)
+    public int bulkUpdateBy$display.capitalize(${field.getFieldName()})(List<${className}> list) {
+        int count = 0;
+        try {
+        mDatabase.beginTransaction();
+        for (${className} ${className.toLowerCase()} : list) {
+            count += update(${className.toLowerCase()}, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})() });
+            mDatabase.yieldIfContendedSafely();
+        }
+        mDatabase.setTransactionSuccessful();
+        } finally {
+            mDatabase.endTransaction();
+        }
+        return count;
+    }
+
+#end
+#end
     public int delete(String whereClause, String[] whereArgs) {
         return mDatabase.delete(${className}Table.TABLE_NAME, whereClause, whereArgs);
+    }
+
+    public int deleteAll() {
+        return mDatabase.delete(${className}Table.TABLE_NAME, null, null);
+    }
+
+    public int deleteByField(String field, String value) {
+        return mDatabase.delete(${className}Table.TABLE_NAME, field + " = ?", new String[] { value });
+    }
+
+#foreach($field in $fields)
+#if(${field.isUnique()} == true)
+    public int deleteBy$display.capitalize(${field.getFieldName()})(String value) {
+        return mDatabase.delete(${className}Table.TABLE_NAME, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] {value});
+    }
+
+#end
+#end
+    private ContentValues asContentValues(${className} ${className.toLowerCase()}) {
+        ContentValues contentValues = new ContentValues();
+#foreach($field in $fields)
+        contentValues.put(${className}Table.COLUMN_${field.getFieldName().toUpperCase()}, ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})());
+#end
+        return contentValues;
     }
 
     private List<${className}> as${className}List(Cursor cursor) {
@@ -75,24 +140,17 @@ public class ${className}DAO {
         return list;
     }
 
-    private ContentValues asContentValues(${className} ob) {
-        ContentValues contentValues = new ContentValues();
-#foreach($field in $fields)
-        contentValues.put(${className}Table.COLUMN_${field.getColumnName().toUpperCase()}, ob.get$display.capitalize(${field.getColumnName()})());
-#end
-        return contentValues;
-    }
-
     private ${className} as${className}(Cursor cursor) {
-        ${className} ob = new ${className}();
+        if (cursor == null || cursor.getCount() <= 0) return null;
+        ${className} ${className.toLowerCase()} = new ${className}();
 #set ($INTEGER = "INTEGER")
 #foreach($field in $fields)
-#if(${field.getColumnType()} == ${INTEGER})
-        ob.set$display.capitalize(${field.getColumnName()})(cursor.getInt(cursor.getColumnIndex(${className}Table.COLUMN_${field.getColumnName().toUpperCase()})));
+#if(${field.getFieldType()} == ${INTEGER})
+        ${className.toLowerCase()}.set$display.capitalize(${field.getFieldName()})(cursor.getInt(cursor.getColumnIndex(${className}Table.COLUMN_${field.getFieldName().toUpperCase()})));
 #else
-        ob.set$display.capitalize(${field.getColumnName()})(cursor.getString(cursor.getColumnIndex(${className}Table.COLUMN_${field.getColumnName().toUpperCase()})));
+        ${className.toLowerCase()}.set$display.capitalize(${field.getFieldName()})(cursor.getString(cursor.getColumnIndex(${className}Table.COLUMN_${field.getFieldName().toUpperCase()})));
 #end
 #end
-        return ob;
+        return ${className.toLowerCase()};
     }
 }

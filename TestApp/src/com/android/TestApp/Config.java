@@ -1,5 +1,6 @@
 package com.android.TestApp;
 
+
 import com.android.gda.dbgenerator.annotations.DbConfig;
 
 /**

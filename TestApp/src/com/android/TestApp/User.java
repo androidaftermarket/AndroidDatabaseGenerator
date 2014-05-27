@@ -1,6 +1,6 @@
 package com.android.TestApp;
 
-import com.android.gda.dbgenerator.annotations.Column;
+import com.android.gda.dbgenerator.annotations.Field;
 import com.android.gda.dbgenerator.annotations.Table;
 
 /**
@@ -9,10 +9,10 @@ import com.android.gda.dbgenerator.annotations.Table;
 @Table
 public class User {
 
-    @Column
+    @Field(unique = true)
     private String name;
 
-    @Column(type = Column.Type.INTEGER)
+    @Field(type = Field.Type.INTEGER)
     private int age;
 
     public int getAge() {

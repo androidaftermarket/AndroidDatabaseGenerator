@@ -14,9 +14,9 @@ public @interface DbConfig {
 
     String databaseName();
 
-    String authority();
+    String authority() default "authority";
 
-    int databaseVersion();
+    int databaseVersion() default 0;
 
     boolean useContentProvider() default false;
 

@@ -31,6 +31,7 @@
             <scope>provided</scope>
             <version>${android.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.android.gda.dbgenerator</groupId>
             <artifactId>com.android.gda.dbgenerator.processors</artifactId>
@@ -43,6 +44,7 @@
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
     <build>

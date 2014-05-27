@@ -3,30 +3,30 @@ package com.android.gda.dbgenerator.processors.elements;
 /**
  * Created by gdaAquino on 5/22/14.
  */
-public class ColumnElement {
+public class FieldElement {
 
-    private String columnName;
+    private String fieldName;
 
-    private String columnType;
+    private String fieldType;
 
     private boolean unique;
 
     private boolean notNull;
 
-    public String getColumnName() {
-        return columnName;
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
-    public String getColumnType() {
-        return columnType;
+    public String getFieldType() {
+        return fieldType;
     }
 
-    public void setColumnType(String columnType) {
-        this.columnType = columnType;
+    public void setFieldType(String fieldType) {
+        this.fieldType = fieldType;
     }
 
     public boolean isUnique() {
@@ -47,9 +47,9 @@ public class ColumnElement {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ColumnElement{");
-        sb.append("columnName='").append(columnName).append('\'');
-        sb.append(", columnType='").append(columnType).append('\'');
+        final StringBuilder sb = new StringBuilder("FieldElement{");
+        sb.append("fieldName='").append(fieldName).append('\'');
+        sb.append(", fieldType='").append(fieldType).append('\'');
         sb.append(", unique=").append(unique);
         sb.append(", notNull=").append(notNull);
         sb.append('}');

@@ -13,11 +13,11 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         TextView tv = (TextView) findViewById(R.id.text);
-        User user = new User();
+        Hello user = new Hello();
         user.setName("Gian Aquino");
         user.setAge(21);
-        UserDAO.getInstance(this).insert(user);
-        tv.setText(UserDAO.getInstance(this).query(null, null, null, null,null).toString());
+        HelloDAO.getInstance(this).insert(user);
+        tv.setText(HelloDAO.getInstance(this).query(null, null, null, null,null).toString());
 
 
     }

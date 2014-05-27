@@ -7,7 +7,7 @@ import com.android.gda.dbgenerator.annotations.Table;
  * Created by gdaAquino on 5/27/14.
  */
 @Table
-public class User {
+public class Hello {
 
     @Field(unique = true)
     private String name;

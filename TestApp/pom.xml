@@ -35,16 +35,15 @@
         <dependency>
             <groupId>com.android.gda.dbgenerator</groupId>
             <artifactId>com.android.gda.dbgenerator.processors</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.android.dbgenerator</groupId>
-            <artifactId>com.android.dbgenerator.annotations</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>com.android.gda.dbgenerator</groupId>
+            <artifactId>com.android.gda.dbgenerator.annotations</artifactId>
+            <version>1.2-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
     <build>

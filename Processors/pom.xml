@@ -5,7 +5,7 @@
 
     <groupId>com.android.gda.dbgenerator</groupId>
     <artifactId>com.android.gda.dbgenerator.processors</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     
     <dependencies>
@@ -13,7 +13,7 @@
         <dependency>
             <groupId>com.android.gda.dbgenerator</groupId>
             <artifactId>com.android.gda.dbgenerator.annotations</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
@@ -21,12 +21,14 @@
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.7</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-tools</artifactId>
             <version>2.0</version>
+            <scope>compile</scope>
         </dependency>
 
 

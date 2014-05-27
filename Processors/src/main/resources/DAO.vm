@@ -38,21 +38,21 @@ public class ${className}DAO {
         return as${className}List(cursor);
     }
 
-    public List<User> queryAll(String orderBy) {
+    public List<${className}> queryAll(String orderBy) {
         Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, null, null, null, null, orderBy);
-        return asUserList(cursor);
+        return as${className}List(cursor);
     }
 
-    public List<User> queryByField(String field, String args, String orderBy) {
+    public List<${className}> queryByField(String field, String args, String orderBy) {
         Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, field + " = " + args, null, null, null, orderBy);
-        return asUserList(cursor);
+        return as${className}List(cursor);
     }
 
 #foreach($field in $fields)
 #if(${field.isUnique()} == true)
-    public User queryBy$display.capitalize(${field.getFieldName()})(String value) {
+    public ${className} queryBy$display.capitalize(${field.getFieldName()})(String value) {
         Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = " + value, null, null, null, null);
-        return asUser(cursor);
+        return as${className}(cursor);
     }
 
 #end

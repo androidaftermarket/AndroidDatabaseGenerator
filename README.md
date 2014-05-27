@@ -20,8 +20,6 @@ Use @DbConfig for the configuration of the Database
 ```
 @DbConfig
   databaseName
-  authority //Currently Not Supported
-  useContentProvider //Currently Not Supported
   databaseVersion 
 ```
 
@@ -34,13 +32,14 @@ public class Config {
 ```
 
 Use @Table to Identify that the class is a table in the database
+
 Use @Field to Identify the field in the table 
 
 ```
 @Field 
-  type = TEXT/INTEGER (default TEXT)
-  unique = true/false (default false)
-  notNull = true/false (default false)
+  type    = TEXT/INTEGER (default TEXT)
+  unique  = true/false   (default false)
+  notNull = true/false   (default false)
 ```
 
 NOTE: Must have Getter and Setter for each Field
@@ -87,10 +86,7 @@ DAO API
   bulkUpdateBy[FIELD](List<[MODEL]> list) //Update By [FIELD] which is UNIQUE
   delete(String whereClause, String[] whereArgs);
   deleteAll();
+  deleteByField(String field, String value);
+  deleteBy[FIELD](String value);//Delete By [FIELD] which is UNIQUE
 ```
-
-deleteByField(String field, String value);
-
-deleteBy[FIELD](String value); //Delete By [FIELD] which is UNIQUE
-
 

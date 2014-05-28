@@ -71,22 +71,3 @@ public class User {
     }
 }
 ```
-
-DAO API
-=======
-```
-  Cursor query(params...);  
-  List<[MODEL]> query(params...);
-  List<[MODEL]> queryAll(String sortOrder);
-  List<[MODEL]> queryByField(String field, String args, String orderBy);
-  [MODEL] queryBy[FIELD](String value); //Query By [FIELD] which is UNIQUE
-  insert([MODEL] ob);
-  bulkInsert(List<[MODEL]> list);
-  update([MODEL] ob, String whereClause, String[] whereArgs);
-  bulkUpdateBy[FIELD](List<[MODEL]> list) //Update By [FIELD] which is UNIQUE
-  delete(String whereClause, String[] whereArgs);
-  deleteAll();
-  deleteByField(String field, String value);
-  deleteBy[FIELD](String value);//Delete By [FIELD] which is UNIQUE
-```
-

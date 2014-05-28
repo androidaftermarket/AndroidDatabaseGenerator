@@ -78,9 +78,17 @@ public class ${className}DAO {
     }
 
     public int update(${className} ${className.toLowerCase()}, String whereClause, String[] whereArgs) {
-        return mDatabase.update(${className}Table.TABLE_NAME,asContentValues(${className.toLowerCase()}), whereClause, whereArgs);
+        return mDatabase.update(${className}Table.TABLE_NAME, asContentValues(${className.toLowerCase()}), whereClause, whereArgs);
     }
 
+#foreach($field in $fields)
+#if(${field.isUnique()} == true)
+    public int updateBy$display.capitalize(${field.getFieldName()})(${className} ${className.toLowerCase()}) {
+        return mDatabase.update(${className}Table.TABLE_NAME, asContentValues(${className.toLowerCase()}), ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})() });
+    }
+
+#end
+#end
 #foreach($field in $fields)
 #if(${field.isUnique()} == true)
     public int bulkUpdateOrInsertBy$display.capitalize(${field.getFieldName()})(List<${className}> list) {

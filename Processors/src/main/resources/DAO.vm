@@ -83,12 +83,14 @@ public class ${className}DAO {
 
 #foreach($field in $fields)
 #if(${field.isUnique()} == true)
-    public int bulkUpdateBy$display.capitalize(${field.getFieldName()})(List<${className}> list) {
+    public int bulkUpdateOrInsertBy$display.capitalize(${field.getFieldName()})(List<${className}> list) {
         int count = 0;
         try {
         mDatabase.beginTransaction();
         for (${className} ${className.toLowerCase()} : list) {
-            count += update(${className.toLowerCase()}, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})() });
+            int affected = update(${className.toLowerCase()}, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})() });
+            if (affected == 0) insert(${className.toLowerCase()});
+            count += affected;
             mDatabase.yieldIfContendedSafely();
         }
         mDatabase.setTransactionSuccessful();
@@ -142,6 +144,7 @@ public class ${className}DAO {
 
     private ${className} as${className}(Cursor cursor) {
         if (cursor == null || cursor.getCount() <= 0) return null;
+        if (cursor.getPosition() == -1) cursor.moveToFirst();
         ${className} ${className.toLowerCase()} = new ${className}();
 #set ($INTEGER = "INTEGER")
 #foreach($field in $fields)

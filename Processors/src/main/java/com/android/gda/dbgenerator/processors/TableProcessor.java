@@ -40,12 +40,12 @@ public class TableProcessor extends AbstractProcessor {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(DbConfig.class);
         Iterator<? extends Element> iterator = elements.iterator();
 
-        boolean useContentProvider = false;
-        boolean withConfig = false;
-        String databasePackage = null;
-        String databaseName = null;
-        String authority = null;
-        int databaseVersion = 0;
+        boolean useContentProvider;
+        boolean withConfig;
+        String databasePackage;
+        String databaseName;
+        String authority;
+        int databaseVersion;
 
         if (elements.size() == 1) {
             withConfig = true;

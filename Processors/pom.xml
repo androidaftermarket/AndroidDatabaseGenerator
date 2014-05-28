@@ -7,30 +7,30 @@
     <artifactId>com.android.gda.dbgenerator.processors</artifactId>
     <version>1.2-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
-    
+    <packaging>jar</packaging>
+
     <dependencies>
 
         <dependency>
             <groupId>com.android.gda.dbgenerator</groupId>
             <artifactId>com.android.gda.dbgenerator.annotations</artifactId>
             <version>1.2-SNAPSHOT</version>
-            <scope>compile</scope>
+            <type>jar</type>
         </dependency>
 
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.7</version>
-            <scope>compile</scope>
+            <type>jar</type>
         </dependency>
 
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-tools</artifactId>
             <version>2.0</version>
-            <scope>compile</scope>
+            <type>jar</type>
         </dependency>
-
 
     </dependencies>
 
@@ -39,7 +39,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
                 <extensions>true</extensions>
                 <configuration>
                     <verbose>true</verbose>
@@ -50,6 +49,24 @@
                     <target>1.6</target>
                     <compilerArgument>-proc:none</compilerArgument>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

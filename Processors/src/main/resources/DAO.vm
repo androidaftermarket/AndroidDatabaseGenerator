@@ -44,14 +44,14 @@ public class ${className}DAO {
     }
 
     public List<${className}> queryByField(String field, String args, String orderBy) {
-        Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, field + " = " + args, null, null, null, orderBy);
+        Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, field + " = ?", new String[] { args }, null, null, orderBy);
         return as${className}List(cursor);
     }
 
 #foreach($field in $fields)
 #if(${field.isUnique()} == true)
     public ${className} queryBy$display.capitalize(${field.getFieldName()})(String value) {
-        Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = " + value, null, null, null, null);
+        Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { value }, null, null, null);
         return as${className}(cursor);
     }
 

@@ -56,7 +56,12 @@ public class ${className}DAO {
 #if(${field.isUnique()} == true)
     public ${className} queryBy$display.capitalize(${field.getFieldName()})(String value) {
         Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { value }, null, null, null);
-        return as${className}(cursor);
+        if (cursor != null && cursor.moveToFirst()) {
+            ${className} ob = as${className}(cursor);
+            cursor.close();
+            return ob;
+        }
+        return null;
     }
 
 #end
@@ -150,13 +155,12 @@ public class ${className}DAO {
                 list.add(as${className}(cursor));
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         return list;
     }
 
     private ${className} as${className}(Cursor cursor) {
         if (cursor == null || cursor.getCount() <= 0) return null;
-        if (cursor.getPosition() == -1) cursor.moveToFirst();
         ${className} ${className.toLowerCase()} = new ${className}();
 #set ($INTEGER = "INTEGER")
 #foreach($field in $fields)

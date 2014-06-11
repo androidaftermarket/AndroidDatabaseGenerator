@@ -93,12 +93,28 @@ public class TableProcessor extends AbstractProcessor {
         }
 
         generateDbOpenHelper(databasePackage, databaseName, databaseVersion, tableElementList);
+        generateDAOListener(databasePackage);
         generateMainThreadExecutor(databasePackage);
         generateBackgroundThreadExecutor(databasePackage);
 
         if (useContentProvider) generateDbProvider(databasePackage, databaseName, authority, tableElementList);
 
         return true;
+    }
+
+    private void generateDAOListener(String packageName) {
+        VelocityEngine ve = new VelocityEngine(getVelocityProperty());
+        ve.init();
+
+        VelocityContext context = new VelocityContext();
+        context.put("packageName", packageName);
+        Template template = ve.getTemplate("DAOListener.vm");
+
+        try {
+            generateSourceCode(template, context, packageName + ".DAOListener");
+        } catch (IOException e) {
+            logE(e.getMessage());
+        }
     }
 
     private void generateMainThreadExecutor(String packageName) {

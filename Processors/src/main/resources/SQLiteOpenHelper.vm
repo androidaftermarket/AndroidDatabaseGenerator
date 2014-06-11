@@ -1,6 +1,7 @@
 package ${packageName};
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -62,4 +63,28 @@ public class ${databaseName}OpenHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
     }
+
+
+    public Cursor rawQuery(final String sql, final String[] selectionArgs) {
+    	return getWritableDatabase().rawQuery(sql, selectionArgs);
+    }
+
+    public void asyncRawQuery(final String sql, final String[] selectionArgs, final DAOListener<Cursor> listener) {
+    	BackgroundThreadExecutor.getInstance().execute(new Runnable() {
+
+			@Override
+			public void run() {
+				final Cursor cursor = rawQuery(sql, selectionArgs);
+				if (listener != null)  {
+					MainThreadExecutor.getInstance().execute(new Runnable() {
+
+						@Override public void run() {
+							listener.onFinish(cursor);
+						}
+					});
+				}
+			}
+		});
+    }
+
 }

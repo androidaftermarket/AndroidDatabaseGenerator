@@ -33,7 +33,7 @@ public class ${databaseName}OpenHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
 #foreach($table in $tables)
-            db.execSQL(${table.getClassName()}Table.CREATE_TABLE);
+            db.execSQL(${table.getPackageName()}.${table.getClassName()}Table.CREATE_TABLE);
 #end
             db.setTransactionSuccessful();
         } catch(SQLException e) {
@@ -50,7 +50,7 @@ public class ${databaseName}OpenHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
 #foreach($table in $tables)
-            db.execSQL(${table.getClassName()}Table.DROP_TABLE);
+            db.execSQL(${table.getPackageName()}.${table.getClassName()}Table.DROP_TABLE);
 #end
             onCreate(db);
             db.setTransactionSuccessful();

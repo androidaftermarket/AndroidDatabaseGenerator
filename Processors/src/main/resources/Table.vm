@@ -1,7 +1,9 @@
 package ${packageName};
 
+#if(${useContentProvider} == true)
 import android.content.ContentResolver;
 import android.net.Uri;
+#end
 import android.provider.BaseColumns;
 
 public class ${className}Table implements BaseColumns {

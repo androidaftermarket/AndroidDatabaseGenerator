@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import ${databasePackageName}.${databaseName}OpenHelper;
+import ${databasePackageName}.BackgroundThreadExecutor;
+import ${databasePackageName}.MainThreadExecutor;
+
 public class ${className}DAO {
 
     private SQLiteDatabase mDatabase;
@@ -84,7 +88,7 @@ public class ${className}DAO {
 #foreach($field in $fields)
 #if(${field.isUnique()} == true)
     public int updateBy$display.capitalize(${field.getFieldName()})(${className} ${className.toLowerCase()}) {
-        return mDatabase.update(${className}Table.TABLE_NAME, asContentValues(${className.toLowerCase()}), ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})() });
+        return mDatabase.update(${className}Table.TABLE_NAME, asContentValues(${className.toLowerCase()}), ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})() + "" });
     }
 
 #end
@@ -96,7 +100,7 @@ public class ${className}DAO {
         try {
         mDatabase.beginTransaction();
         for (${className} ${className.toLowerCase()} : list) {
-            int affected = update(${className.toLowerCase()}, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})() });
+            int affected = update(${className.toLowerCase()}, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { ${className.toLowerCase()}.get$display.capitalize(${field.getFieldName()})() + "" });
             if (affected == 0) insert(${className.toLowerCase()});
             count += affected;
             mDatabase.yieldIfContendedSafely();

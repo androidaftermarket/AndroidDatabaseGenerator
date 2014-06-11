@@ -41,14 +41,12 @@ public class TableProcessor extends AbstractProcessor {
         Iterator<? extends Element> iterator = elements.iterator();
 
         boolean useContentProvider;
-        boolean withConfig;
         String databasePackage;
         String databaseName;
         String authority;
         int databaseVersion;
 
         if (elements.size() == 1) {
-            withConfig = true;
             Element element = iterator.next();
             authority = element.getAnnotation(DbConfig.class).authority();
             databaseName = element.getAnnotation(DbConfig.class).databaseName();
@@ -89,20 +87,51 @@ public class TableProcessor extends AbstractProcessor {
 
             generateDbTable(tableClassElement.getPackageName(), tableClassElement.getClassName(), databaseName, useContentProvider, tableClassFieldElement);
 
-            if (useContentProvider == false && withConfig) {
-                generateDbTableDAO(tableClassElement.getPackageName(), tableClassElement.getClassName(), databaseName, tableClassFieldElement);
+            if (useContentProvider == false) {
+                generateDbTableDAO(databasePackage, tableClassElement.getPackageName(), tableClassElement.getClassName(), databaseName, tableClassFieldElement);
             }
         }
 
-        if (withConfig) {
-            generateDbOpenHelper(databasePackage, databaseName, databaseVersion, tableElementList);
-            if (useContentProvider) generateDbProvider(databasePackage, databaseName, authority, tableElementList);
-        }
+        generateDbOpenHelper(databasePackage, databaseName, databaseVersion, tableElementList);
+        generateMainThreadExecutor(databasePackage);
+        generateBackgroundThreadExecutor(databasePackage);
+
+        if (useContentProvider) generateDbProvider(databasePackage, databaseName, authority, tableElementList);
 
         return true;
     }
 
-    private void generateDbTableDAO(String packageName, String className, String databaseName, List<FieldElement> fields) {
+    private void generateMainThreadExecutor(String packageName) {
+        VelocityEngine ve = new VelocityEngine(getVelocityProperty());
+        ve.init();
+
+        VelocityContext context = new VelocityContext();
+        context.put("packageName", packageName);
+        Template template = ve.getTemplate("MainThreadExecutor.vm");
+
+        try {
+            generateSourceCode(template, context, packageName + ".MainThreadExecutor");
+        } catch (IOException e) {
+            logE(e.getMessage());
+        }
+    }
+
+    private void generateBackgroundThreadExecutor(String packageName) {
+        VelocityEngine ve = new VelocityEngine(getVelocityProperty());
+        ve.init();
+
+        VelocityContext context = new VelocityContext();
+        context.put("packageName", packageName);
+        Template template = ve.getTemplate("BackgroundThreadExecutor.vm");
+
+        try {
+            generateSourceCode(template, context, packageName + ".BackgroundThreadExecutor");
+        } catch (IOException e) {
+            logE(e.getMessage());
+        }
+    }
+
+    private void generateDbTableDAO(String databasePackageName, String packageName, String className, String databaseName, List<FieldElement> fields) {
         VelocityEngine ve = new VelocityEngine(getVelocityProperty());
         ve.init();
 
@@ -111,6 +140,7 @@ public class TableProcessor extends AbstractProcessor {
         context.put("className", className);
         context.put("packageName", packageName);
         context.put("databaseName", databaseName);
+        context.put("databasePackageName", databasePackageName);
         context.put("fields", fields);
         Template template = ve.getTemplate("DAO.vm");
 

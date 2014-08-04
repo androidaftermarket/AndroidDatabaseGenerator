@@ -38,7 +38,7 @@ public class ${className}DAO {
         return mDatabase.query(${className}Table.TABLE_NAME, columns, selection, selectionArgs, groupBy, having, orderBy);
     }
 
-    public void asyncQuery(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final DAOListener<Cursor> listener) {
+    public void query(final String[] columns, final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final DAOListener<Cursor> listener) {
     	BackgroundThreadExecutor.getInstance().execute(new Runnable() {
 
 			@Override
@@ -58,10 +58,10 @@ public class ${className}DAO {
 
     public List<${className}> query(String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
         Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, selection, selectionArgs, groupBy, having, orderBy);
-        return as${className}List(cursor);
+        return to${className}List(cursor);
     }
 
-    public void asyncQuery(final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final DAOListener<List<${className}>> listener) {
+    public void query(final String selection, final String[] selectionArgs, final String groupBy, final String having, final String orderBy, final DAOListener<List<${className}>> listener) {
     	BackgroundThreadExecutor.getInstance().execute(new Runnable() {
 
 			@Override
@@ -81,10 +81,10 @@ public class ${className}DAO {
 
     public List<${className}> queryAll(String orderBy) {
         Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, null, null, null, null, orderBy);
-        return as${className}List(cursor);
+        return to${className}List(cursor);
     }
 
-    public void asyncQueryAll(final String orderBy, final DAOListener<List<${className}>> listener) {
+    public void queryAll(final String orderBy, final DAOListener<List<${className}>> listener) {
     	BackgroundThreadExecutor.getInstance().execute(new Runnable() {
 
 			@Override
@@ -104,10 +104,10 @@ public class ${className}DAO {
 
     public List<${className}> queryByField(String field, String args, String orderBy) {
         Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, field + " = ?", new String[] { args }, null, null, orderBy);
-        return as${className}List(cursor);
+        return to${className}List(cursor);
     }
 
-    public void asyncQueryByField(final String field, final String args, final String orderBy, final DAOListener<List<${className}>> listener) {
+    public void queryByField(final String field, final String args, final String orderBy, final DAOListener<List<${className}>> listener) {
     	BackgroundThreadExecutor.getInstance().execute(new Runnable() {
 
 			@Override
@@ -130,7 +130,7 @@ public class ${className}DAO {
     public ${className} queryBy$display.capitalize(${field.getFieldName()})(String value) {
         Cursor cursor = mDatabase.query(${className}Table.TABLE_NAME, null, ${className}Table.COLUMN_${field.getFieldName().toUpperCase()} + " = ?", new String[] { value }, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
-            ${className} ob = as${className}(cursor);
+            ${className} ob = to${className}(cursor);
             cursor.close();
             return ob;
         }
@@ -143,7 +143,7 @@ public class ${className}DAO {
         return mDatabase.insert(${className}Table.TABLE_NAME, null, asContentValues(${className.toLowerCase()}));
     }
 
-    public int bulkInsert(List<${className}> list) {
+    public int insert(List<${className}> list) {
         int count = 0;
         try {
             mDatabase.beginTransaction();
@@ -159,12 +159,12 @@ public class ${className}DAO {
         return count;
     }
 
-    public void asyncBulkInsert(final List<${className}> list, final DAOListener<Integer> listener) {
+    public void insert(final List<${className}> list, final DAOListener<Integer> listener) {
     	BackgroundThreadExecutor.getInstance().execute(new Runnable() {
 
 			@Override
 			public void run() {
-				final int count = bulkInsert(list);
+				final int count = insert(list);
 				if (listener != null)  {
 					MainThreadExecutor.getInstance().execute(new Runnable() {
 
@@ -181,7 +181,7 @@ public class ${className}DAO {
         return mDatabase.update(${className}Table.TABLE_NAME, contentValues, whereClause, whereArgs);
     }
 
-    public void asyncUpdate(final ContentValues contentValues, final String whereClause, final String[] whereArgs, final DAOListener<Integer> listener) {
+    public void update(final ContentValues contentValues, final String whereClause, final String[] whereArgs, final DAOListener<Integer> listener) {
         BackgroundThreadExecutor.getInstance().execute(new Runnable() {
 
     	    @Override public void run() {
@@ -212,7 +212,7 @@ public class ${className}DAO {
 #end
 #foreach($field in $fields)
 #if(${field.isUnique()} == true)
-    public int bulkUpdateOrInsertBy$display.capitalize(${field.getFieldName()})(List<${className}> list) {
+    public int updateOrInsertBy$display.capitalize(${field.getFieldName()})(List<${className}> list) {
         int count = 0;
         try {
         mDatabase.beginTransaction();
@@ -229,12 +229,12 @@ public class ${className}DAO {
         return count;
     }
 
-    public void asyncBulkUpdateOrInsertBy$display.capitalize(${field.getFieldName()})(final List<${className}> list, final DAOListener<Integer> listener) {
+    public void updateOrInsertBy$display.capitalize(${field.getFieldName()})(final List<${className}> list, final DAOListener<Integer> listener) {
         	BackgroundThreadExecutor.getInstance().execute(new Runnable() {
 
     			@Override
     			public void run() {
-    				final int count = bulkUpdateOrInsertBy$display.capitalize(${field.getFieldName()})(list);
+    				final int count = updateOrInsertBy$display.capitalize(${field.getFieldName()})(list);
     				if (listener != null)  {
     					MainThreadExecutor.getInstance().execute(new Runnable() {
 
@@ -277,19 +277,19 @@ public class ${className}DAO {
         return contentValues;
     }
 
-    private List<${className}> as${className}List(Cursor cursor) {
+    private List<${className}> to${className}List(Cursor cursor) {
         List<${className}> list = new ArrayList<${className}>();
         if (cursor == null) return list;
         if (cursor.moveToFirst()) {
             do {
-                list.add(as${className}(cursor));
+                list.add(to${className}(cursor));
             } while (cursor.moveToNext());
         }
         cursor.close();
         return list;
     }
 
-    private ${className} as${className}(Cursor cursor) {
+    private ${className} to${className}(Cursor cursor) {
         if (cursor == null || cursor.getCount() <= 0) return null;
         ${className} ${className.toLowerCase()} = new ${className}();
 #set ($INTEGER = "INTEGER")

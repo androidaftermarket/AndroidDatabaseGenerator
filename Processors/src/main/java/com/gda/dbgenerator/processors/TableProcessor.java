@@ -1,10 +1,10 @@
-package com.android.gda.dbgenerator.processors;
+package com.gda.dbgenerator.processors;
 
-import com.android.gda.dbgenerator.annotations.DbConfig;
-import com.android.gda.dbgenerator.annotations.Field;
-import com.android.gda.dbgenerator.annotations.Table;
-import com.android.gda.dbgenerator.processors.elements.FieldElement;
-import com.android.gda.dbgenerator.processors.elements.TableElement;
+import com.gda.dbgenerator.annotations.DbConfig;
+import com.gda.dbgenerator.annotations.Field;
+import com.gda.dbgenerator.annotations.Table;
+import com.gda.dbgenerator.processors.elements.FieldElement;
+import com.gda.dbgenerator.processors.elements.TableElement;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -28,7 +28,7 @@ import java.util.*;
  * Created by gdaAquino on 5/22/14.
  */
 
-@SupportedAnnotationTypes("com.android.gda.dbgenerator.annotations.DbConfig")
+@SupportedAnnotationTypes("com.gda.dbgenerator.annotations.DbConfig")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class TableProcessor extends AbstractProcessor {
 

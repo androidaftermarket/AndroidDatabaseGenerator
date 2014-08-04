@@ -69,7 +69,7 @@ public class ${databaseName}OpenHelper extends SQLiteOpenHelper {
     	return getWritableDatabase().rawQuery(sql, selectionArgs);
     }
 
-    public void asyncRawQuery(final String sql, final String[] selectionArgs, final DAOListener<Cursor> listener) {
+    public void rawQuery(final String sql, final String[] selectionArgs, final DAOListener<Cursor> listener) {
     	BackgroundThreadExecutor.getInstance().execute(new Runnable() {
 
 			@Override

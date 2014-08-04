@@ -1,4 +1,4 @@
-package com.android.gda.dbgenerator.processors.elements;
+package com.gda.dbgenerator.processors.elements;
 
 /**
  * Created by gdaAquino on 5/22/14.

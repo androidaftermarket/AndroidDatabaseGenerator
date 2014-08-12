@@ -1,0 +1,54 @@
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    version = POM_VERSION_NAME
+    group = POM_GROUP_NAME
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    configure(install.repositories.mavenInstaller) {
+
+        pom.project {
+
+            artifactId POM_ARTIFACT_NAME
+            description POM_DESCRIPTION
+            packaging POM_PACKAGING
+
+            licenses {
+                license {
+                    url POM_LICENCE_URL
+                    name POM_LICENCE_NAME
+                    distribution POM_LICENCE_DIST
+                }
+            }
+
+            developers {
+                developer {
+                    id POM_DEVELOPER_ID
+                    name POM_DEVELOPER_NAME
+                }
+            }
+        }
+    }
+}
+
+project(':Processors') {
+    dependencies {
+        compile project(':Annotations')
+        compile 'org.apache.velocity:velocity:1.7'
+        compile 'org.apache.velocity:velocity-tools:2.0'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
+
+
+
+

@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
         Contact contact = new Contact();
 
         try {
-          contact.setId(Integer.parseInt(etId.getText().toString()));
+          contact.setContactId(Integer.parseInt(etId.getText().toString()));
           contact.setFirstName(etFname.getText().toString());
           contact.setLastName(etLname.getText().toString());
           contact.setAge(Integer.parseInt(etAge.getText().toString()));

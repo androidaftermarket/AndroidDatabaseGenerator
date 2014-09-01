@@ -52,13 +52,6 @@ sourceSets {
   test.runtimeClasspath += configurations.provided
 }
 
-apt {
-  arguments {
-    resourcePackageName android.defaultConfig.packageName
-    androidManifestFile variant.processResources.manifestFile
-  }
-}
-
 dependencies {
   apt project(':Processors')
   provided project(':Annotations')

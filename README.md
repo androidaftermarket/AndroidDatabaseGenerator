@@ -1,7 +1,7 @@
-AndroidDatabaseGenerator
+#AndroidDatabaseGenerator
 ========================
 
-How to use:
+###How to use:
 
 1. Add _@DbConfig(databaseName = "YourDatabaseName", databaseVersion = YourDatabaseVersion)_ into your Application.
 
@@ -40,51 +40,27 @@ public class Contact {
   public void setContactId(int contactId) {
     this.contactId = contactId;
   }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public int getAge() {
-    return age;
-  }
-
-  public void setAge(int age) {
-    this.age = age;
-  }
-}
+  
+  ... Getter and Setter
 
 ```
 
 3. Compile your Project and it will generate the ff. files.
+  1. DatabaseOpenHelper
+  2. DAO for each Model
   
-  a.) DatabaseOpenHelper
-  b.) DAO for each Model
   
-  
-Sample Usage based on the example above:
+###Sample Usage based on the example above:
 
 ```
-//Insert
-Contact contact = new Contact(); //Your Model
+// Insert
+Contact contact = new Contact(); // Your Model
 contact.setContactId(1);
 contact.setFirstName("Hello");
 contact.setLastName("World");
 contact.setAge("2014");
 ContactDAO.getInstance(getApplicationContext()).insert(contact);
 
-//Query
+// Query
 List<Contact> contactList = ContactDAO.getInstance(getApplicationContext()).queryAll(SORT_ORDER);
 ```

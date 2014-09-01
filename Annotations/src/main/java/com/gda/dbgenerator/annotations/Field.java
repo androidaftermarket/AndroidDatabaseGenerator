@@ -6,32 +6,31 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by gdaAquino on 5/22/14.
+ * @author Gian Darren Azriel Aquino
+ * @since 5/22/14
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.SOURCE)
 public @interface Field {
 
-    Type type() default Type.TEXT;
+  Type type();
 
-    boolean unique() default false;
+  boolean unique() default false;
 
-    boolean notNull() default  false;
+  boolean notNull() default false;
 
-    public enum Type {
+  public enum Type {
 
-        TEXT("TEXT"), INTEGER("INTEGER");
+    TEXT("TEXT"), INTEGER("INTEGER");
 
-        private String value;
+    private String value;
 
-        private Type(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
+    private Type(String value) {
+      this.value = value;
     }
 
-
+    public String getValue() {
+      return value;
+    }
+  }
 }

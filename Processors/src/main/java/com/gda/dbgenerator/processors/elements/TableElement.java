@@ -5,37 +5,36 @@ package com.gda.dbgenerator.processors.elements;
  */
 public class TableElement {
 
-    private String className;
+  private String className;
 
-    private String packageName;
+  private String packageName;
 
+  public String getClassName() {
+    return className;
+  }
 
-    public String getClassName() {
-        return className;
-    }
+  public void setClassName(String className) {
+    this.className = className;
+  }
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
+  public String getPackageName() {
+    return packageName;
+  }
 
-    public String getPackageName() {
-        return packageName;
-    }
+  public void setPackageName(String packageName) {
+    this.packageName = packageName;
+  }
 
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
+  public String getPath() {
+    return packageName + "." + className;
+  }
 
-    public String getPath() {
-        return packageName + "." + className;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("TableElement{");
-        sb.append("className='").append(className).append('\'');
-        sb.append(", packageName='").append(packageName).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("TableElement{");
+    sb.append("className='").append(className).append('\'');
+    sb.append(", packageName='").append(packageName).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 }

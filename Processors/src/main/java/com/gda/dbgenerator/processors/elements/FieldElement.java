@@ -5,54 +5,54 @@ package com.gda.dbgenerator.processors.elements;
  */
 public class FieldElement {
 
-    private String fieldName;
+  private String fieldName;
 
-    private String fieldType;
+  private String fieldType;
 
-    private boolean unique;
+  private boolean unique;
 
-    private boolean notNull;
+  private boolean notNull;
 
-    public String getFieldName() {
-        return fieldName;
-    }
+  public String getFieldName() {
+    return fieldName;
+  }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
-    }
+  public void setFieldName(String fieldName) {
+    this.fieldName = fieldName;
+  }
 
-    public String getFieldType() {
-        return fieldType;
-    }
+  public String getFieldType() {
+    return fieldType;
+  }
 
-    public void setFieldType(String fieldType) {
-        this.fieldType = fieldType;
-    }
+  public void setFieldType(String fieldType) {
+    this.fieldType = fieldType;
+  }
 
-    public boolean isUnique() {
-        return unique;
-    }
+  public boolean isUnique() {
+    return unique;
+  }
 
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
 
-    public boolean isNotNull() {
-        return notNull;
-    }
+  public boolean isNotNull() {
+    return notNull;
+  }
 
-    public void setNotNull(boolean notNull) {
-        this.notNull = notNull;
-    }
+  public void setNotNull(boolean notNull) {
+    this.notNull = notNull;
+  }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("FieldElement{");
-        sb.append("fieldName='").append(fieldName).append('\'');
-        sb.append(", fieldType='").append(fieldType).append('\'');
-        sb.append(", unique=").append(unique);
-        sb.append(", notNull=").append(notNull);
-        sb.append('}');
-        return sb.toString();
-    }
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("FieldElement{");
+    sb.append("fieldName='").append(fieldName).append('\'');
+    sb.append(", fieldType='").append(fieldType).append('\'');
+    sb.append(", unique=").append(unique);
+    sb.append(", notNull=").append(notNull);
+    sb.append('}');
+    return sb.toString();
+  }
 }

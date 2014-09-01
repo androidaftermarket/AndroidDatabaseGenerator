@@ -3,7 +3,7 @@
 
 ###How to use:
 
-1. Add _@DbConfig(databaseName = "YourDatabaseName", databaseVersion = YourDatabaseVersion)_ into your Application.
+1. Add _@DbConfig(databaseName = "YourDatabaseName", databaseVersion = "YourDatabaseVersion")_ into your Application.
 
 ```
 @DbConfig(databaseName = "MyDatabase", databaseVersion = 1)
@@ -11,6 +11,7 @@ public class MyApplication extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
+    ...
   }
 }
 ```
@@ -58,9 +59,9 @@ Contact contact = new Contact(); // Your Model
 contact.setContactId(1);
 contact.setFirstName("Hello");
 contact.setLastName("World");
-contact.setAge("2014");
 ContactDAO.getInstance(getApplicationContext()).insert(contact);
 
 // Query
-List<Contact> contactList = ContactDAO.getInstance(getApplicationContext()).queryAll(SORT_ORDER);
+List<Contact> contactList = 
+    ContactDAO.getInstance(getApplicationContext()).queryAll(SORT_ORDER);
 ```

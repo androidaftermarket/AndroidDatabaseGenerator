@@ -14,11 +14,14 @@ public class ${databaseName}OpenHelper extends SQLiteOpenHelper {
 
     private static volatile ${databaseName}OpenHelper mInstance;
 
+    private static volatile SQLiteDatabase mDatabase;
+
     public static ${databaseName}OpenHelper getInstance(Context context) {
         if (mInstance == null) {
             synchronized (${databaseName}OpenHelper.class) {
                 if (mInstance == null) {
                     mInstance = new ${databaseName}OpenHelper(context.getApplicationContext());
+                    mDatabase = mInstance.getWritableDatabase();
                 }
             }
         }
@@ -29,39 +32,28 @@ public class ${databaseName}OpenHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    public synchronized SQLiteDatabase getCachedDatabase() {
+        if (mDatabase == null || !mDatabase.isOpen()) {
+            mDatabase = getWritableDatabase();
+        }
+        return mDatabase;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.beginTransaction();
-        try {
+
 #foreach($table in $tables)
-            db.execSQL(${table.getPackageName()}.${table.getClassName()}Table.CREATE_TABLE);
+        db.execSQL(${table.getPackageName()}.${table.getClassName()}Table.CREATE_TABLE);
 #end
-            db.setTransactionSuccessful();
-        } catch(SQLException e) {
-            e.printStackTrace();
-        } catch(IllegalStateException e) {
-            e.printStackTrace();
-        } finally {
-            db.endTransaction();
-        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.beginTransaction();
-        try {
+
 #foreach($table in $tables)
-            db.execSQL(${table.getPackageName()}.${table.getClassName()}Table.DROP_TABLE);
+        db.execSQL(${table.getPackageName()}.${table.getClassName()}Table.DROP_TABLE);
 #end
-            onCreate(db);
-            db.setTransactionSuccessful();
-        } catch(SQLException e) {
-            e.printStackTrace();
-        } catch(IllegalStateException e) {
-           e.printStackTrace();
-        } finally {
-            db.endTransaction();
-        }
+        onCreate(db);
     }
 
 
@@ -86,5 +78,4 @@ public class ${databaseName}OpenHelper extends SQLiteOpenHelper {
 			}
 		});
     }
-
 }

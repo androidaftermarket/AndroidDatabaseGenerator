@@ -8,10 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+#if(${packageName} != ${databasePackageName})
 import ${databasePackageName}.${databaseName}OpenHelper;
 import ${databasePackageName}.BackgroundThreadExecutor;
 import ${databasePackageName}.MainThreadExecutor;
 import ${databasePackageName}.DAOListener;
+#end
 
 public class ${className}DAO {
 
@@ -23,7 +25,7 @@ public class ${className}DAO {
         if (mInstance == null) {
             synchronized (${className}DAO.class) {
                 if (mInstance == null) {
-                    mInstance = new ${className}DAO(context);
+                    mInstance = new ${className}DAO(context.getApplicationContext());
                 }
             }
         }
@@ -31,7 +33,7 @@ public class ${className}DAO {
     }
 
     private ${className}DAO(Context context) {
-        mDatabase = ${databaseName}OpenHelper.getInstance(context).getWritableDatabase();
+        mDatabase = ${databaseName}OpenHelper.getInstance(context).getCachedDatabase();
     }
 
     public Cursor query(String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {

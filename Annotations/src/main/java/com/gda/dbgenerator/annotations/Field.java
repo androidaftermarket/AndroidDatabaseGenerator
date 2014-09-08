@@ -21,7 +21,7 @@ public @interface Field {
 
   public enum Type {
 
-    TEXT("TEXT"), INTEGER("INTEGER");
+    TEXT("TEXT"), INTEGER("INTEGER"), REAL("REAL");
 
     private String value;
 

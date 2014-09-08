@@ -23,6 +23,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.util.ElementFilter;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -275,6 +276,16 @@ public class TableProcessor extends AbstractProcessor {
       FieldElement fieldElement = new FieldElement();
       fieldElement.setFieldName(variableElement.getSimpleName().toString());
       fieldElement.setFieldType(variableElement.getAnnotation(Field.class).type().getValue());
+
+      TypeKind typeKind = variableElement.asType().getKind();
+
+      if (typeKind == TypeKind.FLOAT) {
+        fieldElement.setDeclaredFieldType("FLOAT");
+      }
+      else if (typeKind == TypeKind.DOUBLE) {
+        fieldElement.setDeclaredFieldType("DOUBLE");
+      }
+
       fieldElement.setUnique(variableElement.getAnnotation(Field.class).unique());
       fieldElement.setNotNull(variableElement.getAnnotation(Field.class).notNull());
       tableClassFieldElement.add(fieldElement);

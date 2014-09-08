@@ -294,10 +294,19 @@ public class ${className}DAO {
     private ${className} to${className}(Cursor cursor) {
         if (cursor == null || cursor.getCount() <= 0) return null;
         ${className} ${className.toLowerCase()} = new ${className}();
+#set ($REAL = "REAL")
+#set ($FLOAT= "FLOAT")
+#set ($DOUBLE = "DOUBLE")
 #set ($INTEGER = "INTEGER")
 #foreach($field in $fields)
 #if(${field.getFieldType()} == ${INTEGER})
         ${className.toLowerCase()}.set$display.capitalize(${field.getFieldName()})(cursor.getInt(cursor.getColumnIndex(${className}Table.COLUMN_${field.getFieldName().toUpperCase()})));
+#elseif(${field.getFieldType()} == ${REAL})
+#if(${field.getDeclaredFieldType()} == ${DOUBLE})
+        ${className.toLowerCase()}.set$display.capitalize(${field.getFieldName()})(cursor.getDouble(cursor.getColumnIndex(${className}Table.COLUMN_${field.getFieldName().toUpperCase()})));
+#elseif(${field.getDeclaredFieldType()} == ${FLOAT})
+        ${className.toLowerCase()}.set$display.capitalize(${field.getFieldName()})(cursor.getFloat(cursor.getColumnIndex(${className}Table.COLUMN_${field.getFieldName().toUpperCase()})));
+#end
 #else
         ${className.toLowerCase()}.set$display.capitalize(${field.getFieldName()})(cursor.getString(cursor.getColumnIndex(${className}Table.COLUMN_${field.getFieldName().toUpperCase()})));
 #end

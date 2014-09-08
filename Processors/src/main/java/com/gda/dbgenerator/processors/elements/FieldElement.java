@@ -9,9 +9,13 @@ public class FieldElement {
 
   private String fieldType;
 
+  private String declaredFieldType;
+
   private boolean unique;
 
   private boolean notNull;
+
+
 
   public String getFieldName() {
     return fieldName;
@@ -27,6 +31,14 @@ public class FieldElement {
 
   public void setFieldType(String fieldType) {
     this.fieldType = fieldType;
+  }
+
+  public String getDeclaredFieldType() {
+    return declaredFieldType;
+  }
+
+  public void setDeclaredFieldType(String declaredFieldType) {
+    this.declaredFieldType = declaredFieldType;
   }
 
   public boolean isUnique() {
@@ -45,14 +57,13 @@ public class FieldElement {
     this.notNull = notNull;
   }
 
-  @Override
-  public String toString() {
-    final StringBuilder sb = new StringBuilder("FieldElement{");
-    sb.append("fieldName='").append(fieldName).append('\'');
-    sb.append(", fieldType='").append(fieldType).append('\'');
-    sb.append(", unique=").append(unique);
-    sb.append(", notNull=").append(notNull);
-    sb.append('}');
-    return sb.toString();
+  @Override public String toString() {
+    return "FieldElement{" +
+        "declaredFieldType=" + declaredFieldType +
+        ", notNull=" + notNull +
+        ", unique=" + unique +
+        ", fieldType='" + fieldType + '\'' +
+        ", fieldName='" + fieldName + '\'' +
+        '}';
   }
 }
